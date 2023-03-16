@@ -1,0 +1,94 @@
+.App {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #DEE1EF;
+}
+
+.btn {
+    border-radius: 12px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.light {
+    background-color: #5A5D6C;
+    color: #DEE1EF;
+}
+
+.dark {
+    background-color: #3D3F4A;
+}
+
+.calculator-container {
+    background-color: #23242A;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 25px;
+    row-gap: 20px;
+}
+
+.operations {
+    width: 240px;
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    height: 50px;
+    border-radius: 12px;
+    align-items: center;
+}
+
+.operations p {
+    grid-column: 2 / 3;
+    margin: 0;
+    text-align: center;
+}
+
+.operations img {
+    margin-left: 10px;
+}
+
+.show-graph {
+    width: 110px;
+}
+
+.upper-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 15px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.header p {
+    margin: 0;
+    color: #DEE1EF;
+}
+
+.display-container {
+    height: 70px;
+    width: 100%;
+    border-radius: 12px;
+    color: #DEE1EF;
+}
+
+.lower-container {
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(5, 1fr);
+    row-gap: 15px;
+    column-gap: 15px;
+    width: 100%;
+}
