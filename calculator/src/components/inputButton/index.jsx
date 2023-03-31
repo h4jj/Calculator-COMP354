@@ -8,7 +8,9 @@ const InputButton = ({
     text, 
     operation,
     setEvaluationString,
-    evaluationString
+    evaluationString,
+    setValue,
+    setOperation
   }) => {
 
   const [number, setNumber] = useState(text)
@@ -25,14 +27,14 @@ const InputButton = ({
     if(complexFunctions.includes(operation)) {
       evaluateComplexOperation()
     }
-    else {
-      try {
-        setEvaluationString(eval(evaluationString))
-      }
-      catch (e) {
-        toast("Invalid input")
-      }
+
+    try {
+      setEvaluationString(eval(evaluationString))
     }
+    catch (e) {
+      toast("Invalid input")
+    }
+    
   }
 
   const evaluateComplexOperation = () => {
@@ -43,86 +45,83 @@ const InputButton = ({
 
         if(Number(base) && Number(exponent)) {
           let result = power(base, exponent)
-          // setValue(result)
+          console.log("result: ",result)
+          setEvaluationString(prev => prev + result)
         }
         else {
           toast("Missing input number")
         }
         break;
       
-      case "SINH":
-        let inputNumber = Number(document.getElementById('sinh-number').innerText)
+      // case "SINH":
+      //   let inputNumber = Number(document.getElementById('sinh-number').innerText)
 
-        if(inputNumber) {
-          let result = sinh(inputNumber)
-          // setValue(result)
-        }
-        else {
-          toast("Missing input number")
-        }
-        break;
+      //   if(inputNumber) {
+      //     let result = sinh(inputNumber)
+      //     // setValue(result)
+      //   }
+      //   else {
+      //     toast("Missing input number")
+      //   }
+      //   break;
     }
   }
 
   const performComplexOperation = () => {
     switch(operation) {
       case "PWR":
-        if(!isNaN(text)) {
-          let largePlaceholder = document.getElementById('pwr-large')
-          let smallPlaceholder = document.getElementById('pwr-small')
-          
-          if(isNaN(largePlaceholder.innerText)) {
-            largePlaceholder.style.color = '#DEE1EF'
-            largePlaceholder.innerText = text
-          }
-          else if(isNaN(smallPlaceholder.innerText)) {
-            smallPlaceholder.style.color = '#DEE1EF'
-            smallPlaceholder.innerText = text
-          }
-          break;
-          
+        let largePlaceholder = document.getElementById('pwr-large')
+        let smallPlaceholder = document.getElementById('pwr-small')
+        
+        if(isNaN(largePlaceholder.innerText)) {
+          largePlaceholder.style.color = '#DEE1EF'
+          largePlaceholder.innerText = text
         }
-        else {
-          toast("press clear to perform other operations")
-          break;
+        else if(isNaN(smallPlaceholder.innerText)) {
+          smallPlaceholder.style.color = '#DEE1EF'
+          smallPlaceholder.innerText = text
         }
-      case "SINH":
-        if(Number(text)) {
-          let leftPlaceholder = document.getElementById('sinh-left')
-          let rightPlaceholder = document.getElementById('sinh-right')
-          let numberPlaceholder = document.getElementById('sinh-number')
+        break;
           
-          if(numberPlaceholder.innerText === 'x') {
-            numberPlaceholder.style.color = '#DEE1EF'
-            rightPlaceholder.style.color = '#DEE1EF'
-            leftPlaceholder.style.color = '#DEE1EF'
-            numberPlaceholder.innerText = text
-          }
-          else {
-            numberPlaceholder.innerText += text
-          }
+        
+      // case "SINH":
+      //   if(Number(text)) {
+      //     let leftPlaceholder = document.getElementById('sinh-left')
+      //     let rightPlaceholder = document.getElementById('sinh-right')
+      //     let numberPlaceholder = document.getElementById('sinh-number')
+          
+      //     if(numberPlaceholder.innerText === 'x') {
+      //       numberPlaceholder.style.color = '#DEE1EF'
+      //       rightPlaceholder.style.color = '#DEE1EF'
+      //       leftPlaceholder.style.color = '#DEE1EF'
+      //       numberPlaceholder.innerText = text
+      //     }
+      //     else {
+      //       numberPlaceholder.innerText += text
+      //     }
 
-          break;
+      //     break;
           
-        }
-        else {
-          toast("press clear to perform other operations")
-          break;
-        }
+      //   }
+      //   else {
+      //     toast("press clear to perform other operations")
+      //     break;
+      //   }
     }
   }
 
   const formatComplexOperation = () => {
-    // setOperation(text)
-    // document.getElementById('output-text').innerHTML = ''
+    setOperation(text)
+    document.getElementById('output-text').innerHTML = ''
+    // setValue('')
 
     switch(text) {
       case "PWR":
         formatPower()
         break;
-      case "SINH":
-        formatSinh()
-        break;
+      // case "SINH":
+      //   formatSinh()
+      //   break;
       // case "LOG":
       //   performLog()
       //   break;
@@ -159,6 +158,10 @@ const InputButton = ({
       performComplexOperation()
     }
     else if(basicArithmetic.includes(text)) {
+      if(complexFunctions.includes(operation)) {
+        evaluateComplexOperation()
+        setOperation('')
+      }
       setEvaluationString(prev => prev + ` ${text} `)
     }
     else { 

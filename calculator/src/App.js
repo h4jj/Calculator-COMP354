@@ -9,6 +9,7 @@ function App() {
   
   const [value, setValue] = useState('')
   const [evaluationString, setEvaluationString] = useState('')
+  const [operation, setOperation] = useState('')
 
   const numberPad = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
   const complexFunctionsButtons = ['PWR', 'STD', 'LOG', 'MEAN', 'SINH', '-', '-', '-']
@@ -51,15 +52,17 @@ function App() {
             style={{
               display: 'grid',
               gridTemplateColumns: '3fr 1fr',
-              alignItems: 'center'
+              alignItems: 'center',
+              whiteSpace: 'nowrap',
+              overflowX: 'scroll'
             }}
           >
             <p
               id="output-text"
               style={{
                 margin: 0,
-                paddingLeft: '20px',
-                fontSize: '20px'
+                padding: '0 15px',
+                fontSize: '20px',
               }}
             >
               {value}
@@ -76,7 +79,7 @@ function App() {
             }}
           >
             {complexFunctionsButtons.map((item, index) => (
-              <InputButton text={item} key={index} />
+              <InputButton setEvaluationString={setEvaluationString} setValue={setValue} operation={operation} setOperation={setOperation} evaluationString={evaluationString} text={item} key={index} />
             ))}
           </div>
           <div className='lower-container'>
@@ -90,7 +93,7 @@ function App() {
               }}
             >
               {numberPad.map((item, index) => (
-                <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} text={item} key={index} />
+                <InputButton setEvaluationString={setEvaluationString} operation={operation} evaluationString={evaluationString} text={item} key={index} />
               ))}
             </div>
             <div
@@ -101,7 +104,7 @@ function App() {
               }}
             >  
               {arithmeticButtons.map((item, index) => (
-                <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} text={item} key={index} />
+                <InputButton setEvaluationString={setEvaluationString} operation={operation} setOperation={setOperation} evaluationString={evaluationString} text={item} key={index} />
               ))}
             </div>
             <div
@@ -115,7 +118,7 @@ function App() {
             >
               <InputButton setEvaluationString={setEvaluationString} text={"CLR"} />
               <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} text={"C"} />
-              <InputButton text={"0"} />
+              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} text={"0"} />
               <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} text={"="} />
               {/* <InputButton setOperation={setOperation} setValue={setValue} accumulator={accumulator} setAccumulator={setAccumulator} value={value} operation={operation} text={"x"} /> */}
             </div>
