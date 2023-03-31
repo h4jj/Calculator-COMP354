@@ -2,41 +2,21 @@ import { useEffect, useState, useRef } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css'
-import optionsLogo from './assets/options.svg'
 import InputButton from './components/inputButton';
 
 
 function App() {
   
-  const [value, setValue] = useState(null)
-  const [operation, setOperation] = useState(null)
-  const [accumulator, setAccumulator] = useState(null)
-  const TOTAL_INPUT_BUTTONS = 30
-  const inputRef = useRef(null)
+  const [value, setValue] = useState('')
+  const [evaluationString, setEvaluationString] = useState('')
+
+  const numberPad = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+  const complexFunctionsButtons = ['PWR', 'STD', 'LOG', 'MEAN', 'SINH', '-', '-', '-']
+  const arithmeticButtons = ['+', '-', '/']
 
   useEffect(() => {
-
-    if(accumulator === null) {
-      setAccumulator(value)
-    }
-
-    switch(operation) {
-      case "+":
-        setAccumulator((prev) => prev + value)
-        break;
-      case "-":
-        setAccumulator((prev) => prev - value)
-        break;
-      case "/":
-        setAccumulator((prev) => prev / value)
-        break;
-      case "x":
-        setAccumulator((prev) => prev * value)
-        break;
-        
-
-    }
-  }, [value])
+    setValue(evaluationString)
+  }, [evaluationString])
 
   return (
     <>
@@ -76,7 +56,6 @@ function App() {
           >
             <p
               id="output-text"
-              ref={inputRef}
               style={{
                 margin: 0,
                 paddingLeft: '20px',
@@ -96,14 +75,9 @@ function App() {
               rowGap: '10px'
             }}
           >
-            <InputButton setValue={setValue} setOperation={setOperation} operation={operation} value={value} inputRef={inputRef} text={"PWR"} />
-            <InputButton setValue={setValue} setOperation={setOperation} operation={operation} value={value} text={"STD"} />
-            <InputButton setValue={setValue} setOperation={setOperation} operation={operation} value={value} text={"LOG"} />
-            <InputButton setValue={setValue} setOperation={setOperation} operation={operation} value={value} text={"MEAN"} />
-            <InputButton setValue={setValue} setOperation={setOperation} operation={operation} value={value} text={"SINH"} />
-            <InputButton setValue={setValue} text={"-"} />
-            <InputButton setValue={setValue} text={"-"} />
-            <InputButton setValue={setValue} text={"-"} />
+            {complexFunctionsButtons.map((item, index) => (
+              <InputButton text={item} key={index} />
+            ))}
           </div>
           <div className='lower-container'>
             <div 
@@ -115,15 +89,9 @@ function App() {
                 rowGap: '10px'
               }}
             >
-              <InputButton setValue={setValue} operation={operation} text={1} />
-              <InputButton setValue={setValue} operation={operation} text={2} />
-              <InputButton setValue={setValue} operation={operation} text={3} />
-              <InputButton setValue={setValue} operation={operation} text={4} />
-              <InputButton setValue={setValue} operation={operation} text={5} />
-              <InputButton setValue={setValue} operation={operation} text={6} />
-              <InputButton setValue={setValue} operation={operation} text={7} />
-              <InputButton setValue={setValue} operation={operation} text={8} />
-              <InputButton setValue={setValue} operation={operation} text={9} />
+              {numberPad.map((item, index) => (
+                <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} text={item} key={index} />
+              ))}
             </div>
             <div
               style={{
@@ -132,22 +100,24 @@ function App() {
                 rowGap: '10px'
               }}
             >  
-              <InputButton setOperation={setOperation} operation={operation} value={value} text={"+"} />
-              <InputButton setOperation={setOperation} operation={operation} value={value} text={"-"} />
-              <InputButton setOperation={setOperation} operation={operation} value={value} text={"/"} />
+              {arithmeticButtons.map((item, index) => (
+                <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} text={item} key={index} />
+              ))}
             </div>
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: '1fr 1.9fr 1fr',
+                gridTemplateColumns: '1fr 1fr 1fr 1fr',
                 columnGap: '10px',
                 gridRow: '2 / 3',
                 gridColumn: '1 / 3'
               }}
             >
-              <InputButton setValue={setValue} setAccumulator={setAccumulator} setOperation={setOperation} inputRef={inputRef} text={"CLR"} />
-              <InputButton setValue={setValue} accumulator={accumulator} setOperation={setOperation} operation={operation} text={"="} />
-              <InputButton setOperation={setOperation} value={value} operation={operation} text={"x"} />
+              <InputButton setEvaluationString={setEvaluationString} text={"CLR"} />
+              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} text={"C"} />
+              <InputButton text={"0"} />
+              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} text={"="} />
+              {/* <InputButton setOperation={setOperation} setValue={setValue} accumulator={accumulator} setAccumulator={setAccumulator} value={value} operation={operation} text={"x"} /> */}
             </div>
           </div>
         <div>

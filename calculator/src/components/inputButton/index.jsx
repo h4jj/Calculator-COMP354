@@ -1,166 +1,171 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify';
-import power from '../../functions/power'
-import sinh from '../../functions/sinh'
-import mean from '../../functions/mean'
-// import log from '../../functions/log'
+import {power, mean, std, sinh} from '../../functions';
+import {formatPower, formatSinh, formatMean, formatStd, formatLog} from '../../functionFormatting';
+
 
 const InputButton = ({
     text, 
-    setValue, 
-    accumulator, 
-    setOperation, 
-    setAccumulator, 
-    value, 
-    operation, 
-    inputRef
+    operation,
+    setEvaluationString,
+    evaluationString
   }) => {
 
   const [number, setNumber] = useState(text)
   const basicArithmetic = ["x", "/", "+", "-"]
   const complexFunctions = ["PWR", "LOG", "STD", "MEAN", "SINH"]
 
+  const clearInput = () => {
+    setEvaluationString('')
+  }
+
+
   const displayResults = () => {
 
-    setOperation(null)
-
     if(complexFunctions.includes(operation)) {
-      switch(operation) {
-        case "PWR":
-          let largePlaceholder = document.getElementById('pwr-large').innerText
-          let smallPlaceholder = document.getElementById('pwr-small').innerText
-          let result = power(largePlaceholder, smallPlaceholder)
-          setOperation(null)
-          setValue(result)          
-      }
+      evaluateComplexOperation()
     }
     else {
-      console.debug("accumulator: ", accumulator)
-      setValue(accumulator)
+      try {
+        setEvaluationString(eval(evaluationString))
+      }
+      catch (e) {
+        toast("Invalid input")
+      }
     }
   }
 
-  const formatPower = () => {
-    let largePlaceholder = document.createElement('span')
-    largePlaceholder.innerText = "X"
-    largePlaceholder.id = "pwr-large"
+  const evaluateComplexOperation = () => {
+    switch(operation) {
+      case "PWR":
+        let base = document.getElementById('pwr-large').innerText
+        let exponent = document.getElementById('pwr-small').innerText
 
-    let smallPlaceholder = document.createElement('span')
-    smallPlaceholder.id = "pwr-small"
-    smallPlaceholder.innerText = "Y"
+        if(Number(base) && Number(exponent)) {
+          let result = power(base, exponent)
+          // setValue(result)
+        }
+        else {
+          toast("Missing input number")
+        }
+        break;
+      
+      case "SINH":
+        let inputNumber = Number(document.getElementById('sinh-number').innerText)
 
-    smallPlaceholder.style.fontSize = '12px'
-    smallPlaceholder.style.position = 'absolute'
-    smallPlaceholder.style.paddingLeft = '4px'
-    smallPlaceholder.style.color = '#949494'
-
-    largePlaceholder.style.color = '#949494'
-
-    document.getElementById('output-text').appendChild(largePlaceholder)
-    document.getElementById('output-text').appendChild(smallPlaceholder)
-    
+        if(inputNumber) {
+          let result = sinh(inputNumber)
+          // setValue(result)
+        }
+        else {
+          toast("Missing input number")
+        }
+        break;
+    }
   }
 
-  const performSinh = () => {
+  const performComplexOperation = () => {
+    switch(operation) {
+      case "PWR":
+        if(!isNaN(text)) {
+          let largePlaceholder = document.getElementById('pwr-large')
+          let smallPlaceholder = document.getElementById('pwr-small')
+          
+          if(isNaN(largePlaceholder.innerText)) {
+            largePlaceholder.style.color = '#DEE1EF'
+            largePlaceholder.innerText = text
+          }
+          else if(isNaN(smallPlaceholder.innerText)) {
+            smallPlaceholder.style.color = '#DEE1EF'
+            smallPlaceholder.innerText = text
+          }
+          break;
+          
+        }
+        else {
+          toast("press clear to perform other operations")
+          break;
+        }
+      case "SINH":
+        if(Number(text)) {
+          let leftPlaceholder = document.getElementById('sinh-left')
+          let rightPlaceholder = document.getElementById('sinh-right')
+          let numberPlaceholder = document.getElementById('sinh-number')
+          
+          if(numberPlaceholder.innerText === 'x') {
+            numberPlaceholder.style.color = '#DEE1EF'
+            rightPlaceholder.style.color = '#DEE1EF'
+            leftPlaceholder.style.color = '#DEE1EF'
+            numberPlaceholder.innerText = text
+          }
+          else {
+            numberPlaceholder.innerText += text
+          }
+
+          break;
+          
+        }
+        else {
+          toast("press clear to perform other operations")
+          break;
+        }
+    }
   }
 
-  const performLog = () => {
-  }
-
-  const performStd = () => {
-  }
-
-  const performMean = () => {
-  }
-
-  const performOperation = () => {
+  const formatComplexOperation = () => {
+    // setOperation(text)
+    // document.getElementById('output-text').innerHTML = ''
 
     switch(text) {
-      case "CLR":
-        inputRef.current.innerHTML = ''
-        setValue(null)
-        setOperation(null)
-        setAccumulator(null)
-        return
-      case "=": 
-        displayResults()
-        return
+      case "PWR":
+        formatPower()
+        break;
+      case "SINH":
+        formatSinh()
+        break;
+      // case "LOG":
+      //   performLog()
+      //   break;
+      // case "STD":
+      //   performStd()
+      //   break;
+      // case "MEAN":
+      //   performMean()
+      //   break;
+        
     }
-
-    if(complexFunctions.includes(operation)) {
-      switch(operation) {
-        case "PWR":
-          if(!isNaN(text)) {
-            let largePlaceholder = document.getElementById('pwr-large')
-            let smallPlaceholder = document.getElementById('pwr-small')
-            
-            if(isNaN(largePlaceholder.innerText)) {
-              largePlaceholder.style.color = '#DEE1EF'
-              largePlaceholder.innerText = text
-            }
-            else if(isNaN(smallPlaceholder.innerText)) {
-              smallPlaceholder.style.color = '#DEE1EF'
-              smallPlaceholder.innerText = text
-            }
-            else {
-              toast("press equal to display results")
-            }
-            
-          }
-          else {
-            toast("press clear to perform other operations")
-          }
-
-      }
-    }
-    else {
-      if(!isNaN(text)) {
-        setValue(text)
-      }
-      else {
-  
-        if(basicArithmetic.includes(text)) {
-          if(value === null) {
-            toast("Must input a number first before selecting operation")
-          }
-          else {
-            setOperation(text)
-          }
-        }
-        else if(complexFunctions.includes(text)) {
-          if(value !== null) {
-            toast("Must press clear before using complex operations")
-          }
-          else {
-            setOperation(text)
-  
-            switch(text) {
-              case "PWR":
-                formatPower()
-                break;
-              case "LOG":
-                performLog()
-                break;
-              case "STD":
-                performStd()
-                break;
-              case "SINH":
-                performSinh()
-                break;
-              case "MEAN":
-                performMean()
-                break;
-              
-            }
-          }
-        }
-      }
-    }
-
-
   }
 
 
+  const performOperation = () => {
+    if(text === "CLR") {
+      clearInput()
+    }
+    else if(text === "C") {
+      if(evaluationString.at(-1) === ' ') {
+        setEvaluationString(evaluationString.slice(0, -2))  
+      }
+      else {
+        setEvaluationString(evaluationString.slice(0, -1))
+      }
+    }
+    else if(text === "=") {
+      displayResults()
+    }
+    else if(complexFunctions.includes(text)) {
+      formatComplexOperation()    
+    }
+    else if(complexFunctions.includes(operation)) {
+      performComplexOperation()
+    }
+    else if(basicArithmetic.includes(text)) {
+      setEvaluationString(prev => prev + ` ${text} `)
+    }
+    else { 
+      setEvaluationString(prev => prev + text)
+    }
+  }
+    
   return (
     <div 
         onClick={performOperation}
