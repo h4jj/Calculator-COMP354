@@ -37,60 +37,60 @@ export function sinh(x){
     }
 }
 
-export // Takes in an array of numbers and returns the mean
+// Takes in an array of numbers and returns the mean
 function mean(numbers) {
-    let sum = numbers.reduce((sum, curr) => sum + curr, 0);
-    return sum / numbers.length;
-  }
+  let sum = numbers.reduce((sum, curr) => sum + curr, 0);
+  return sum / numbers.length;
+}
   
   // Returns the absolute value of a number
-  function abs(value) {
-    return value >= 0 ? value : -value;
-  }
+function abs(value) {
+  return value >= 0 ? value : -value;
+}
   
-  // Takes in an array of numbers and return the MAD (Mean Absolute Deviation)
-  function mad(numbers) {
-    // Calculate the mean of the numbers
-    let meanValue = mean(numbers);
-  
-    // Calculate the absolute deviations from the mean using custom abs function
-    let absoluteDeviations = numbers.map(num => abs(num - meanValue));
-  
-    // Calculate and return the mean of the absolute deviations
-    return mean(absoluteDeviations);
+// Takes in an array of numbers and return the MAD (Mean Absolute Deviation)
+export function mad(numbers) {
+  // Calculate the mean of the numbers
+  let meanValue = mean(numbers);
+
+  // Calculate the absolute deviations from the mean using custom abs function
+  let absoluteDeviations = numbers.map(num => abs(num - meanValue));
+
+  // Calculate and return the mean of the absolute deviations
+  return mean(absoluteDeviations);
 }
 
-// export function log(base, x) {
-//     if (x < 0 || base <= 0) {
-//        return NaN;
-//     }
-//     if (x === 0) {
-//        return -Infinity;
-//     }
-//     if (x === 1) {
-//        return 0;
-//     }
-//     var result = 0;
-//     while (x >= base) {
-//        result++;
-//        x /= base;
-//     }
+export function log(base, x) {
+    if (x < 0 || base <= 0) {
+       return NaN;
+    }
+    if (x === 0) {
+       return -Infinity;
+    }
+    if (x === 1) {
+       return 0;
+    }
+    var result = 0;
+    while (x >= base) {
+       result++;
+       x /= base;
+    }
  
-//     var decimalString = "0.";
-//     for (let index = 0; index < 9; index++) {
-//        var fraction = 0;
-//        x = power(x, 10);
+    var decimalString = "0.";
+    for (let index = 0; index < 9; index++) {
+       var fraction = 0;
+       x = power(x, 10);
  
-//        while (x >= base) {
-//           fraction++;
-//           x /= base;
-//        }
-//        decimalString += fraction;
-//     }
+       while (x >= base) {
+          fraction++;
+          x /= base;
+       }
+       decimalString += fraction;
+    }
  
-//     fractionDouble = parseFloat(decimalString);
-//     return result + fractionDouble;
-// }
+    let fractionDouble = parseFloat(decimalString);
+    return result + fractionDouble;
+}
 
 function squareRoot(x) {
   if (x < 0) throw new Error("Cannot take square root of negative number");
@@ -110,4 +110,54 @@ export function standardDeviation(numbers) {
   const variance = sumOfSquaredDifferences / n;
   const standardDeviation = squareRoot(variance);
   return standardDeviation;
+}
+
+/**
+* Computes the arccosine of a given input value using the Maclaurin series approximation.
+* @param {number} x - The input value (must be between -1 and 1).
+* @returns {number} The arccosine of x in radians.
+* @throws Throws an error if x is outside the range [-1, 1].
+*/
+
+export function arccos(x) {
+ // Check that x is within the valid range of -1 to 1.
+  if (x > 1 || x < -1) {
+    throw "Input value out of range";
+  }
+ 
+  // Initialize variables.
+  let result = 0;
+  let term = x;
+  let n = 1;
+ 
+ // Compute additional terms in the Maclaurin series until the magnitude of the current term falls below a certain threshold.
+  while (Math.abs(term) > 1e-15) {
+    // Update result with the current term.
+    result += term;
+    // Compute the next term using the formula for the Maclaurin series of arccos(x).
+    term = (term * x * x * (2 * n - 1) * (2 * n - 1)) / ((2 * n) * (2 * n + 1));
+    n++;
+  }
+ 
+  // Return the arccosine of x (in radians).
+  return Math.PI / 2 - result;
+}
+
+export function abx(a, b, x){
+  var result = 1;
+
+  if(x == 0){
+      result = 1;
+  }
+  else if(x < 0){
+      for (let i = 0; i > x; i--) {
+          result /= b;
+        }
+  }
+  else{
+      for (let i = 0; i < x; i++) {
+          result *= b;
+        }
+  }
+  return result * a
 }

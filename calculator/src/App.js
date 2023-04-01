@@ -12,7 +12,7 @@ function App() {
   const [operation, setOperation] = useState('')
 
   const numberPad = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
-  const complexFunctionsButtons = ['PWR', 'STD', 'LOG', 'MEAN', 'SINH', '-', '-', '-']
+  const complexFunctionsButtons = ['PWR', 'STD', 'LOG', 'MAD', 'SINH', 'ARCCOS', 'ABX', 'SQRT']
   const arithmeticButtons = ['+', '-', '/']
 
   useEffect(() => {
@@ -116,20 +116,36 @@ function App() {
                 gridColumn: '1 / 3'
               }}
             >
+            </div>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                gridColumn: '1 / 3',
+                columnGap: '10px'
+              }}
+            >
+            <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} text={"0"} />
+            <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} text={"00"} />
+            <InputButton setEvaluationString={setEvaluationString} text={"."} />
+            <InputButton setEvaluationString={setEvaluationString} operation={operation} setOperation={setOperation} evaluationString={evaluationString} text={"x"} />
+            </div>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 2fr',
+                gridColumn: '1 / 3',
+                columnGap: '10px'
+              }}
+            >
               <InputButton setEvaluationString={setEvaluationString} text={"CLR"} />
               <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} text={"C"} />
-              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} text={"0"} />
               <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} text={"="} />
-              {/* <InputButton setOperation={setOperation} setValue={setValue} accumulator={accumulator} setAccumulator={setAccumulator} value={value} operation={operation} text={"x"} /> */}
             </div>
           </div>
-        <div>
-
-          </div>
-      
-        </div>
       </div>
-    </>
+    </div>
+  </>
   );
 }
 

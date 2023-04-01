@@ -45,7 +45,6 @@ const InputButton = ({
 
         if(Number(base) && Number(exponent)) {
           let result = power(base, exponent)
-          console.log("result: ",result)
           setEvaluationString(prev => prev + result)
         }
         else {
@@ -158,11 +157,12 @@ const InputButton = ({
       performComplexOperation()
     }
     else if(basicArithmetic.includes(text)) {
-      if(complexFunctions.includes(operation)) {
-        evaluateComplexOperation()
-        setOperation('')
-      }
-      setEvaluationString(prev => prev + ` ${text} `)
+      // if(complexFunctions.includes(operation)) {
+      //   evaluateComplexOperation()
+      //   setOperation('')
+      // }
+
+      setEvaluationString(prev => prev + ` ${text === 'x' ? '*' : text} `)
     }
     else { 
       setEvaluationString(prev => prev + text)
@@ -183,7 +183,12 @@ const InputButton = ({
             cursor: 'pointer'
         }}
     >
-        <p style={{color: `${operation === text ? '#3D3F4A' : '#DEE1EF'}`, margin: 0}}>{text}</p>
+        <p style={{
+          color: `${operation === text ? '#3D3F4A' : '#DEE1EF'}`, 
+          margin: 0
+        }}>
+          {text}
+        </p>
     </div>
   )
 }
