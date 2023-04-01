@@ -92,7 +92,7 @@ export function log(base, x) {
     return result + fractionDouble;
 }
 
-function squareRoot(x) {
+export function sqrt(x) {
   if (x < 0) throw new Error("Cannot take square root of negative number");
   if (x === 0) return 0;
   let guess = x / 2;
@@ -102,13 +102,13 @@ function squareRoot(x) {
   return guess;
 }
 
-export function standardDeviation(numbers) {
+export function std(numbers) {
   const n = numbers.length;
   const mean = numbers.reduce((sum, x) => sum + x, 0) / n;
   const squaredDifferences = numbers.map(x => (x - mean) * (x - mean));
   const sumOfSquaredDifferences = squaredDifferences.reduce((sum, x) => sum + x, 0);
   const variance = sumOfSquaredDifferences / n;
-  const standardDeviation = squareRoot(variance);
+  const standardDeviation = sqrt(variance);
   return standardDeviation;
 }
 

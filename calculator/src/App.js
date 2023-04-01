@@ -12,7 +12,7 @@ function App() {
   const [operation, setOperation] = useState('')
 
   const numberPad = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
-  const complexFunctionsButtons = ['PWR', 'STD', 'LOG', 'MAD', 'SINH', 'ARCCOS', 'ABX', 'SQRT']
+  const complexFunctionsButtons = ['PWR','ABX', 'ARCCOS', 'SINH', 'LOG','SQRT', 'STD', 'MAD']
   const arithmeticButtons = ['+', '-', '/']
 
   useEffect(() => {
@@ -125,10 +125,10 @@ function App() {
                 columnGap: '10px'
               }}
             >
-            <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} text={"0"} />
-            <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} text={"00"} />
-            <InputButton setEvaluationString={setEvaluationString} text={"."} />
-            <InputButton setEvaluationString={setEvaluationString} operation={operation} setOperation={setOperation} evaluationString={evaluationString} text={"x"} />
+              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} text={"0"} />
+              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} text={"00"} />
+              <InputButton setEvaluationString={setEvaluationString} operation={operation} text={"."} />
+              <InputButton setEvaluationString={setEvaluationString} operation={operation} setOperation={setOperation} evaluationString={evaluationString} text={"x"} />
             </div>
             <div
               style={{
@@ -138,9 +138,9 @@ function App() {
                 columnGap: '10px'
               }}
             >
-              <InputButton setEvaluationString={setEvaluationString} text={"CLR"} />
-              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} text={"C"} />
-              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} text={"="} />
+              <InputButton setEvaluationString={setEvaluationString} setOperation={setOperation} operation={operation} text={"CLR"} />
+              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} setOperation={setOperation} text={"C"} />
+              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} setOperation={setOperation} text={"="} />
             </div>
           </div>
       </div>
