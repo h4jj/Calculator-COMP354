@@ -10,6 +10,7 @@ function App() {
   const [value, setValue] = useState('')
   const [evaluationString, setEvaluationString] = useState('')
   const [operation, setOperation] = useState('')
+  const [answer, setAnswer] = useState('')
 
   const numberPad = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
   const complexFunctionsButtons = ['PWR','ABX', 'ARCCOS', 'SINH', 'LOG','SQRT', 'STD', 'MAD']
@@ -79,7 +80,7 @@ function App() {
             }}
           >
             {complexFunctionsButtons.map((item, index) => (
-              <InputButton setEvaluationString={setEvaluationString} setValue={setValue} operation={operation} setOperation={setOperation} evaluationString={evaluationString} text={item} key={index} />
+              <InputButton setEvaluationString={setEvaluationString} setAnswer={setAnswer} setValue={setValue} operation={operation} setOperation={setOperation} evaluationString={evaluationString} text={item} key={index} />
             ))}
           </div>
           <div className='lower-container'>
@@ -133,14 +134,15 @@ function App() {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: '1fr 1fr 2fr',
+                gridTemplateColumns: '1fr 1fr 1fr 1fr',
                 gridColumn: '1 / 3',
                 columnGap: '10px'
               }}
             >
               <InputButton setEvaluationString={setEvaluationString} setOperation={setOperation} operation={operation} text={"CLR"} />
               <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} setOperation={setOperation} text={"C"} />
-              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} setOperation={setOperation} text={"="} />
+              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} answer={answer} text={"ANS"} />
+              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} setAnswer={setAnswer} setOperation={setOperation} text={"="} />
             </div>
           </div>
       </div>

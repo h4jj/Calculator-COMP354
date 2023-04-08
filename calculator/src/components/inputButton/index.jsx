@@ -10,7 +10,9 @@ const InputButton = ({
     setEvaluationString,
     evaluationString,
     setValue,
-    setOperation
+    setOperation,
+    setAnswer,
+    answer
   }) => {
 
   const [number, setNumber] = useState(text)
@@ -34,7 +36,9 @@ const InputButton = ({
     }
     else {
       try {
-        setEvaluationString("" + eval(evaluationString))
+        const result = "" + eval(evaluationString)
+        setAnswer(result)
+        setEvaluationString(result)
       }
       catch (e) {
         toast("Invalid input")
@@ -54,6 +58,7 @@ const InputButton = ({
         if((Number(base) || base === '0') && (Number(exponent) || exponent === '0')) {
           try {
             resultPwr = power(base, exponent)
+            setAnswer(resultPwr)
           }
           catch (e) {
             toast(e)
@@ -74,6 +79,7 @@ const InputButton = ({
         if((Number(baseOne) || baseOne === '0') && (Number(baseTwo) || baseTwo === '0') && (Number(exponentOne) || exponentOne === '0')) {
           try {
             resultAbx = abx(baseOne, baseTwo, exponentOne)
+            setAnswer(resultAbx)
           }
           catch (e) {
             toast(e)
@@ -92,6 +98,7 @@ const InputButton = ({
         if(Number(inputNumber)) {
           try {
             resultSinh = sinh(Number(inputNumber))
+            setAnswer(resultSinh)
           }
           catch(e) {
             toast(e)
@@ -110,6 +117,7 @@ const InputButton = ({
         if(Number(inputNumberArc)) {
           try {
             resultArc = arccos(Number(inputNumberArc))
+            setAnswer(resultArc)
           } 
           catch (e) {
             toast(e)
@@ -131,6 +139,7 @@ const InputButton = ({
           if(logNumber === '0' || Number(logNumber)) {
             try {
               resultLog = log(logBase, logNumber)
+              setAnswer(resultLog)
             }    
             catch(e) {
               toast(e)
@@ -152,6 +161,7 @@ const InputButton = ({
 
           try {
             resultStd = std(stdNumberArray)
+            setAnswer(resultStd)
           }
           catch(e) {
             toast(e)
@@ -175,6 +185,7 @@ const InputButton = ({
 
           try {
             resultMad = mad(madNumberArray)
+            setAnswer(resultMad)
           }
           catch(e) {
             toast(e)
@@ -195,6 +206,7 @@ const InputButton = ({
         if(Number(sqrtInput)) {
           try {
             resultSqrt = sqrt(Number(sqrtInput))
+            setAnswer(resultSqrt)
           }
           catch(e) {
             toast(e)
@@ -210,6 +222,11 @@ const InputButton = ({
   }
 
   const performComplexOperation = () => {
+
+    if(text === 'ANS') {
+      text = answer
+    }
+
     switch(operation) {
       case "PWR":
         let largePlaceholder = document.getElementById('pwr-large')
@@ -417,6 +434,7 @@ const InputButton = ({
 
 
   const performOperation = () => {
+
     if(text === "CLR") {
       clearInput()
     }
@@ -457,7 +475,7 @@ const InputButton = ({
       performComplexOperation()
     }
     else {
-      setEvaluationString(prev => prev + text)
+      setEvaluationString(prev => prev + `${text === 'ANS' ? answer : text}`)
     }
   }
     
