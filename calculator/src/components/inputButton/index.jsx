@@ -12,7 +12,9 @@ const InputButton = ({
     setValue,
     setOperation,
     setAnswer,
-    answer
+    answer,
+    nextForComplex,
+    setNextForComplex
   }) => {
 
   const [number, setNumber] = useState(text)
@@ -20,6 +22,15 @@ const InputButton = ({
   const complexFunctions = ["PWR", "LOG", "STD", "MAD", "SINH", "ARCCOS", "ABX", "SQRT"]
 
   const clearInput = () => {
+
+    setNextForComplex({
+      PWR: {base: false, exponent: false},
+      ABX: {baseOne: false, baseTwo: false, exponent: false},
+      LOG: {base: false, number: false},
+      STD: {number: false},
+      MAD: {number: false},
+    })
+
     setEvaluationString('')
     
     if(operation !== '') {
@@ -232,13 +243,23 @@ const InputButton = ({
         let largePlaceholder = document.getElementById('pwr-large')
         let smallPlaceholder = document.getElementById('pwr-small')
         
-        if((Number(text) || text === '0') && !(Number(largePlaceholder.innerText) || largePlaceholder.innerText === '0')) {
+        if((Number(text) || text === '0' || text === '.') && !nextForComplex.PWR.base) {
           largePlaceholder.style.color = '#DEE1EF'
-          largePlaceholder.innerText = text
+          if(largePlaceholder.innerText === 'X') {
+            largePlaceholder.innerText = text
+          }
+          else {
+            largePlaceholder.innerText += text
+          }
         }
-        else if((Number(text) || text === '0') && !(Number(smallPlaceholder.innerText) || smallPlaceholder.innerText === '0')) {
+        else if((Number(text) || text === '0' || text === '.') && !nextForComplex.PWR.exponent) {
           smallPlaceholder.style.color = '#DEE1EF'
-          smallPlaceholder.innerText = text
+          if(smallPlaceholder.innerText === 'Y') {
+            smallPlaceholder.innerText = text
+          }
+          else {
+            smallPlaceholder.innerText += text
+          }
         }
         else if(!(Number(text) || text === '0')) {
           toast("Input must be a number")
@@ -249,17 +270,32 @@ const InputButton = ({
         let largePlaceholderTwo = document.getElementById('pwr-large-two')
         let smallPlaceholderOne = document.getElementById('pwr-small')
         
-        if((Number(text) || text === '0') && !(Number(largePlaceholderOne.innerText) || largePlaceholderOne.innerText === '0')) {
+        if((Number(text) || text === '0' || text === '.') && !nextForComplex.ABX.baseOne) {
           largePlaceholderOne.style.color = '#DEE1EF'
-          largePlaceholderOne.innerText = text
+          if(largePlaceholderOne.innerText === 'a ') {
+            largePlaceholderOne.innerText = text
+          }
+          else {
+            largePlaceholderOne.innerText += text
+          }
         }
-        else if((Number(text) || text === '0') && !(Number(largePlaceholderTwo.innerText) || largePlaceholderTwo.innerText === '0')) {
+        else if((Number(text) || text === '0' || text === '.') && !nextForComplex.ABX.baseTwo) {
           largePlaceholderTwo.style.color = '#DEE1EF'
-          largePlaceholderTwo.innerText = text
+          if(largePlaceholderTwo.innerText === 'b') {
+            largePlaceholderTwo.innerText = text
+          }
+          else {
+            largePlaceholderTwo.innerText += text
+          }
         }
-        else if((Number(text) || text === '0') && !(Number(smallPlaceholderOne.innerText) || smallPlaceholderOne.innerText === '0')) {
+        else if((Number(text) || text === '0' || text === '.') && !nextForComplex.ABX.exponent) {
           smallPlaceholderOne.style.color = '#DEE1EF'
-          smallPlaceholderOne.innerText = text
+          if(smallPlaceholderOne.innerText === 'x') {
+            smallPlaceholderOne.innerText = text
+          }
+          else {
+            smallPlaceholderOne.innerText += text
+          }
         }
         else if(!(Number(text) || text === '0')) {
           toast("Input must be a number")
@@ -267,7 +303,7 @@ const InputButton = ({
         break;  
 
       case "SINH":
-        if(Number(text) || text === '0') {
+        if(Number(text) || text === '0' || text === '.') {
           let leftPlaceholder = document.getElementById('sinh-left')
           let rightPlaceholder = document.getElementById('sinh-right')
           let numberPlaceholder = document.getElementById('sinh-number')
@@ -311,14 +347,14 @@ const InputButton = ({
         }
 
       case "LOG":
-        if(Number(text) || text === '0') {
-          let leftPlaceholder = document.getElementById('log-left')
-          let rightPlaceholder = document.getElementById('log-right')
-          let logNumber = document.getElementById('log-number')
-          let logBase = document.getElementById('log-base')
-          let logComma = document.getElementById('log-comma')
 
-          
+        let leftPlaceholder = document.getElementById('log-left')
+        let rightPlaceholder = document.getElementById('log-right')
+        let logNumber = document.getElementById('log-number')
+        let logBase = document.getElementById('log-base')
+        let logComma = document.getElementById('log-comma')
+
+        if((Number(text) || text === '0' || text === '.') && !nextForComplex.LOG.base) {
           if(logBase.innerText === 'base') {
             logBase.style.color = '#DEE1EF'
             rightPlaceholder.style.color = '#DEE1EF'
@@ -326,9 +362,17 @@ const InputButton = ({
             logComma.style.color = '#DEE1EF'
             logBase.innerText = text
           }
-          else if(logNumber.innerText === 'number') {
+          else {
+            logBase.innerText += text
+          }
+        }
+        else if((Number(text) || text === '0' || text === '.') && !nextForComplex.LOG.number) {
+          if(logNumber.innerText === 'number') {
             logNumber.style.color = '#DEE1EF'
             logNumber.innerText = text
+          }
+          else {
+            logNumber.innerText += text
           }
         }
         else {
@@ -339,7 +383,9 @@ const InputButton = ({
       case "STD":
         let stdNumberString = document.getElementById('std-numbers')
         let numberString = stdNumberString.innerText
-        if(Number(text) || text === '0') {
+        setNextForComplex(prev => ({...prev, STD: {...prev.STD, number: false}}))
+
+        if(Number(text) || text === '0' || text === '.') {
           
           document.getElementById('std-left').style.color = '#DEE1EF'
           document.getElementById('std-right').style.color = '#DEE1EF'
@@ -349,7 +395,7 @@ const InputButton = ({
             numberString = text
           }
           else {
-            numberString += `,${text}`
+            numberString += `${text}`
           }
           
         }
@@ -359,7 +405,7 @@ const InputButton = ({
       case "MAD":
         let madNumberString = document.getElementById('mad-numbers')
         let madString = madNumberString.innerText
-        if(Number(text) || text === '0') {
+        if(Number(text) || text === '0' || text === '.') {
           
           document.getElementById('mad-left').style.color = '#DEE1EF'
           document.getElementById('mad-right').style.color = '#DEE1EF'
@@ -369,7 +415,7 @@ const InputButton = ({
             madString = text
           }
           else {
-            madString += `,${text}`
+            madString += `${text}`
           }
           
         }
@@ -377,7 +423,7 @@ const InputButton = ({
         break;
       
       case "SQRT":
-        if(Number(text) || text === '0') {
+        if(Number(text) || text === '0' || text === '.') {
           let leftPlaceholder = document.getElementById('sqrt-left')
           let rightPlaceholder = document.getElementById('sqrt-right')
           let numberPlaceholder = document.getElementById('sqrt-number')
@@ -461,6 +507,54 @@ const InputButton = ({
     }
     else if(text === "=") {
       displayResults()
+    }
+    else if(text === "Next") {
+      switch(operation) {
+        case "PWR":
+          if(!nextForComplex.PWR.base) {
+            setNextForComplex(prev => ({...prev, PWR: {...prev.PWR, base: true}}))
+            return;
+          }
+          else if(!nextForComplex.PWR.exponent) {
+            setNextForComplex(prev => ({...prev, PWR: {...prev.PWR, exponent: true}}))
+            return;
+          }
+        case "ABX":
+          if(!nextForComplex.ABX.baseOne) {
+            setNextForComplex(prev => ({...prev, ABX: {...prev.ABX, baseOne: true}}))
+            return;
+          }
+          else if(!nextForComplex.ABX.baseTwo) {
+            setNextForComplex(prev => ({...prev, ABX: {...prev.ABX, baseTwo: true}}))
+            return;
+          }
+          else if(!nextForComplex.ABX.exponent) {
+            setNextForComplex(prev => ({...prev, ABX: {...prev.ABX, exponent: true}}))
+            return;
+          }
+        case "LOG":
+          if(!nextForComplex.LOG.base) {
+            setNextForComplex(prev => ({...prev, LOG: {...prev.LOG, base: true}}))
+          }
+          else if(!nextForComplex.LOG.number) {
+            setNextForComplex(prev => ({...prev, LOG: {...prev.LOG, number: true}}))
+            return;
+          }
+        case "STD":
+          if(!nextForComplex.STD.number) {
+            setNextForComplex(prev => ({...prev, STD: {...prev.STD, number: true}}))
+            document.getElementById('std-numbers').innerText += ','
+            return;
+          }
+
+        case "MAD":
+          if(!nextForComplex.MAD.number) {
+            setNextForComplex(prev => ({...prev, MAD: {...prev.MAD, number: true}}))
+            document.getElementById('mad-numbers').innerText += ','
+            return;
+          }
+        
+      }
     }
     else if(basicArithmetic.includes(text)) {
       if(operation !== '') {

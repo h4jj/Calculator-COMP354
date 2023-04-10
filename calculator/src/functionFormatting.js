@@ -21,7 +21,7 @@ export const formatPower = () => {
 
 export const formatAbx = () => {
   let largePlaceholderOne = document.createElement('span')
-  largePlaceholderOne.innerText = "a"
+  largePlaceholderOne.innerText = "a "
   largePlaceholderOne.id = "pwr-large-one"
   
   let largePlaceholderTwo = document.createElement('span')

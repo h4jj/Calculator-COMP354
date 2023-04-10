@@ -11,6 +11,13 @@ function App() {
   const [evaluationString, setEvaluationString] = useState('')
   const [operation, setOperation] = useState('')
   const [answer, setAnswer] = useState('')
+  const [nextForComplex, setNextForComplex] = useState({
+    PWR: {base: false, exponent: false},
+    ABX: {baseOne: false, baseTwo: false, exponent: false},
+    LOG: {base: false, number: false},
+    STD: {number: false},
+    MAD: {number: false}
+  })
 
   const numberPad = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
   const complexFunctionsButtons = ['PWR','ABX', 'ARCCOS', 'SINH', 'LOG','SQRT', 'STD', 'MAD']
@@ -80,8 +87,11 @@ function App() {
             }}
           >
             {complexFunctionsButtons.map((item, index) => (
-              <InputButton setEvaluationString={setEvaluationString} setAnswer={setAnswer} setValue={setValue} operation={operation} setOperation={setOperation} evaluationString={evaluationString} text={item} key={index} />
+              <InputButton setEvaluationString={setEvaluationString} setNextForComplex={setNextForComplex} nextForComplex={nextForComplex} setAnswer={setAnswer} setValue={setValue} operation={operation} setOperation={setOperation} evaluationString={evaluationString} text={item} key={index} />
             ))}
+          </div>
+          <div style={{width: '100%', display: `${operation === '' ? 'none' : 'block'}`}}>
+            <InputButton operation={operation} setNextForComplex={setNextForComplex} nextForComplex={nextForComplex} text={"Next"} />
           </div>
           <div className='lower-container'>
             <div 
@@ -94,7 +104,7 @@ function App() {
               }}
             >
               {numberPad.map((item, index) => (
-                <InputButton setEvaluationString={setEvaluationString} operation={operation} evaluationString={evaluationString} text={item} key={index} />
+                <InputButton setEvaluationString={setEvaluationString} setNextForComplex={setNextForComplex} nextForComplex={nextForComplex} operation={operation} evaluationString={evaluationString} text={item} key={index} />
               ))}
             </div>
             <div
@@ -105,7 +115,7 @@ function App() {
               }}
             >  
               {arithmeticButtons.map((item, index) => (
-                <InputButton setEvaluationString={setEvaluationString} operation={operation} setOperation={setOperation} evaluationString={evaluationString} text={item} key={index} />
+                <InputButton setEvaluationString={setEvaluationString} setNextForComplex={setNextForComplex} nextForComplex={nextForComplex} operation={operation} setOperation={setOperation} evaluationString={evaluationString} text={item} key={index} />
               ))}
             </div>
             <div
@@ -126,10 +136,10 @@ function App() {
                 columnGap: '10px'
               }}
             >
-              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} text={"0"} />
-              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} text={"00"} />
-              <InputButton setEvaluationString={setEvaluationString} operation={operation} text={"."} />
-              <InputButton setEvaluationString={setEvaluationString} operation={operation} setOperation={setOperation} evaluationString={evaluationString} text={"x"} />
+              <InputButton setEvaluationString={setEvaluationString} setNextForComplex={setNextForComplex} evaluationString={evaluationString} operation={operation} nextForComplex={nextForComplex} text={"0"} />
+              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} setNextForComplex={setNextForComplex} operation={operation} nextForComplex={nextForComplex} text={"00"} />
+              <InputButton setEvaluationString={setEvaluationString} operation={operation} evaluationString={evaluationString} setNextForComplex={setNextForComplex} nextForComplex={nextForComplex} text={"."} />
+              <InputButton setEvaluationString={setEvaluationString} operation={operation} setOperation={setOperation} evaluationString={evaluationString} setNextForComplex={setNextForComplex} nextForComplex={nextForComplex} text={"x"} />
             </div>
             <div
               style={{
@@ -139,10 +149,10 @@ function App() {
                 columnGap: '10px'
               }}
             >
-              <InputButton setEvaluationString={setEvaluationString} setOperation={setOperation} operation={operation} text={"CLR"} />
-              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} setOperation={setOperation} text={"C"} />
-              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} answer={answer} text={"ANS"} />
-              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} setAnswer={setAnswer} setOperation={setOperation} text={"="} />
+              <InputButton setEvaluationString={setEvaluationString} setOperation={setOperation} operation={operation} setNextForComplex={setNextForComplex} text={"CLR"} />
+              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} setNextForComplex={setNextForComplex} setOperation={setOperation} text={"C"} />
+              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} setNextForComplex={setNextForComplex} answer={answer} text={"ANS"} />
+              <InputButton setEvaluationString={setEvaluationString} evaluationString={evaluationString} operation={operation} setAnswer={setAnswer} setNextForComplex={setNextForComplex} setOperation={setOperation} text={"="} />
             </div>
           </div>
       </div>
