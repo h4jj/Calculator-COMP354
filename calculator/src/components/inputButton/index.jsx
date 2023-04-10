@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify';
 import {power, mad, std, sinh, arccos, abx, log, sqrt} from '../../functions';
 import {formatPower, formatSinh, formatArccos, formatMad, formatStd, formatLog, formatAbx, formatSqrt} from '../../functionFormatting';
-
+import './index.css'
 
 const InputButton = ({
     text, 
@@ -20,6 +20,7 @@ const InputButton = ({
   const [number, setNumber] = useState(text)
   const basicArithmetic = ["x", "/", "+", "-"]
   const complexFunctions = ["PWR", "LOG", "STD", "MAD", "SINH", "ARCCOS", "ABX", "SQRT"]
+  const [buttonStyle, setButtonStyle] = useState({});
 
   const clearInput = () => {
 
@@ -62,24 +63,29 @@ const InputButton = ({
   const evaluateComplexOperation = () => {
     switch(operation) {
       case "PWR":
-        let base = document.getElementById('pwr-large').innerText
-        let exponent = document.getElementById('pwr-small').innerText
-        let resultPwr = ""
-
-        if((Number(base) || base === '0') && (Number(exponent) || exponent === '0')) {
-          try {
-            resultPwr = power(base, exponent)
-            setAnswer(resultPwr)
+        try {
+          let base = document.getElementById('pwr-large').innerText
+          let exponent = document.getElementById('pwr-small').innerText
+          let resultPwr = ""
+  
+          if((Number(base) || base === '0') && (Number(exponent) || exponent === '0')) {
+            try {
+              resultPwr = power(base, exponent)
+              setAnswer(resultPwr)
+            }
+            catch (e) {
+              toast(e)
+            }
           }
-          catch (e) {
-            toast(e)
+          else {
+            toast("Invalid input")
           }
+          setEvaluationString(prev => prev + ` ${resultPwr} `)
+          setOperation('')
         }
-        else {
-          toast("Invalid input")
+        catch (e) {
+          console.log(e)
         }
-        setEvaluationString(prev => prev + ` ${resultPwr} `)
-        setOperation('')
         break;   
       case "ABX":
         let baseOne = document.getElementById('pwr-large-one').innerText
@@ -163,10 +169,11 @@ const InputButton = ({
         break;
 
       case "STD":
-        let numberString = document.getElementById('std-numbers').innerText
-        let resultStd = ""
         
+        let resultStd = ""
+
         try {
+          let numberString = document.getElementById('std-numbers').innerText
           numberString = numberString.split(',')
           let stdNumberArray = numberString.map(item => (parseInt(item)))
 
@@ -187,10 +194,10 @@ const InputButton = ({
         break;
 
       case "MAD":
-        let madString = document.getElementById('mad-numbers').innerText
         let resultMad = ""
         
         try {
+          let madString = document.getElementById('mad-numbers').innerText
           madString = madString.split(',')
           let madNumberArray = madString.map(item => (parseInt(item)))
 
@@ -273,10 +280,12 @@ const InputButton = ({
         if((Number(text) || text === '0' || text === '.') && !nextForComplex.ABX.baseOne) {
           largePlaceholderOne.style.color = '#DEE1EF'
           if(largePlaceholderOne.innerText === 'a ') {
-            largePlaceholderOne.innerText = text
+            largePlaceholderOne.innerText = `${text} `
           }
           else {
-            largePlaceholderOne.innerText += text
+            let currentText = largePlaceholderOne.innerText.trim()
+            currentText += text
+            largePlaceholderOne.innerText = `${currentText} `
           }
         }
         else if((Number(text) || text === '0' || text === '.') && !nextForComplex.ABX.baseTwo) {
@@ -481,6 +490,14 @@ const InputButton = ({
 
   const performOperation = () => {
 
+    setButtonStyle({
+      boxShadow: '0 0 5px #999'
+    });
+
+    setTimeout(() => {
+      setButtonStyle({});
+    }, 200);
+
     if(text === "CLR") {
       clearInput()
     }
@@ -513,46 +530,44 @@ const InputButton = ({
         case "PWR":
           if(!nextForComplex.PWR.base) {
             setNextForComplex(prev => ({...prev, PWR: {...prev.PWR, base: true}}))
-            return;
+            
           }
           else if(!nextForComplex.PWR.exponent) {
             setNextForComplex(prev => ({...prev, PWR: {...prev.PWR, exponent: true}}))
-            return;
           }
+          break
         case "ABX":
           if(!nextForComplex.ABX.baseOne) {
             setNextForComplex(prev => ({...prev, ABX: {...prev.ABX, baseOne: true}}))
-            return;
           }
           else if(!nextForComplex.ABX.baseTwo) {
             setNextForComplex(prev => ({...prev, ABX: {...prev.ABX, baseTwo: true}}))
-            return;
           }
           else if(!nextForComplex.ABX.exponent) {
             setNextForComplex(prev => ({...prev, ABX: {...prev.ABX, exponent: true}}))
-            return;
           }
+          break
         case "LOG":
           if(!nextForComplex.LOG.base) {
             setNextForComplex(prev => ({...prev, LOG: {...prev.LOG, base: true}}))
           }
           else if(!nextForComplex.LOG.number) {
             setNextForComplex(prev => ({...prev, LOG: {...prev.LOG, number: true}}))
-            return;
           }
+          break
         case "STD":
           if(!nextForComplex.STD.number) {
             setNextForComplex(prev => ({...prev, STD: {...prev.STD, number: true}}))
             document.getElementById('std-numbers').innerText += ','
-            return;
           }
+          break
 
         case "MAD":
           if(!nextForComplex.MAD.number) {
             setNextForComplex(prev => ({...prev, MAD: {...prev.MAD, number: true}}))
             document.getElementById('mad-numbers').innerText += ','
-            return;
           }
+          break
         
       }
     }
@@ -576,21 +591,25 @@ const InputButton = ({
   return (
     <div 
         onClick={performOperation}
+        className='ripple'
         style={{
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center', 
             borderRadius: '12px',
-            backgroundColor: `${operation === text ? '#DEE1EF' : '#3D3F4A'}`,
+            backgroundColor: `${operation === text || Object.keys(buttonStyle).length !== 0 ? '#DEE1EFAA' : '#3D3F4A'}`,
             height: '50px',
             width: '100%',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            boxShadow: `${Object.keys(buttonStyle).length === 0 ? '' : '0 0 5px #999'}`
         }}
     >
-        <p style={{
-          color: `${operation === text ? '#3D3F4A' : '#DEE1EF'}`, 
-          margin: 0
-        }}>
+        <p 
+          style={{
+            color: `${operation === text ? '#3D3F4A' : '#DEE1EF'}`, 
+            margin: 0
+          }}
+        >
           {text}
         </p>
     </div>
