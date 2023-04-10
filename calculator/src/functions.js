@@ -120,6 +120,11 @@ export function std(numbers) {
 */
 
 export function arccos(x) {
+
+  const PI = calculatePI()
+
+  console.log(PI)
+
  // Check that x is within the valid range of -1 to 1.
   if (x > 1 || x < -1) {
     throw "Input value out of range";
@@ -131,7 +136,7 @@ export function arccos(x) {
   let n = 1;
  
  // Compute additional terms in the Maclaurin series until the magnitude of the current term falls below a certain threshold.
-  while (Math.abs(term) > 1e-15) {
+  while (abs(term) > 1e-15) {
     // Update result with the current term.
     result += term;
     // Compute the next term using the formula for the Maclaurin series of arccos(x).
@@ -140,8 +145,28 @@ export function arccos(x) {
   }
  
   // Return the arccosine of x (in radians).
-  return Math.PI / 2 - result;
+  return PI / 2 - result;
 }
+
+function calculatePI(iterations=1000000) {
+  let pi = 0;
+  let numerator = 4;
+
+  for (let i = 0; i < iterations; i++) {
+    let denominator = 1 + 2 * i;
+    let term = numerator / denominator;
+
+    if (i % 2 === 0) {
+      pi += term;
+    } else {
+      pi -= term;
+    }
+  }
+
+  return pi;
+}
+
+
 
 export function abx(a, b, x){
   var result = 1;
