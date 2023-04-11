@@ -170,8 +170,8 @@ export function log(base, number, precision = 1e-10) {
     throw new Error('Invalid input: number and base must be positive and base cannot be 1');
   }
 
-  let lowerBound = 0;
-  let upperBound = number;
+  let lowerBound = -1000;
+  let upperBound = 1000;
   let logValue = (lowerBound + upperBound) / 2;
   let currentValue;
 
