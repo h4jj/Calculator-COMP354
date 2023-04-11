@@ -415,6 +415,8 @@ const InputButton = ({
       case "MAD":
         let madNumberString = document.getElementById('mad-numbers')
         let madString = madNumberString.innerText
+        setNextForComplex(prev => ({...prev, MAD: {...prev.MAD, number: false}}))
+
         if(Number(text) || text === '0' || text === '.') {
           
           document.getElementById('mad-left').style.color = '#DEE1EF'
