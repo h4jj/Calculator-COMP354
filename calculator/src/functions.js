@@ -1,19 +1,49 @@
-export function power(x, y) {
-    if (y === 0) return 1;
-    if (y === 1) return x;
-    if (y < 0) return 1 / power(x, -y);
-    let result = 1;
-    while (y > 0) {
-      if (y % 2 === 0) {
-        x *= x;
-        y /= 2;
-      } else {
-        result *= x;
-        y--;
-      }
+export function power(base, exponent, precision = 1e-10) {
+  // Calculate natural logarithm using the bisection method
+  function ln(x) {
+    if (x <= 0) {
+      throw new Error('Invalid input: x must be positive');
     }
-    return result;
+
+    let lowerBound = 0;
+    let upperBound = x > 1 ? x : 1;
+    let mid = (lowerBound + upperBound) / 2;
+
+    while (upperBound - lowerBound > precision) {
+      let midExp = Math.exp(mid);
+
+      if (midExp === x) {
+        break;
+      } else if (midExp > x) {
+        upperBound = mid;
+      } else {
+        lowerBound = mid;
+      }
+
+      mid = (lowerBound + upperBound) / 2;
+    }
+
+    return mid;
+  }
+
+  // Calculate e^x using the Taylor series
+  function exp(x) {
+    let sum = 1;
+    let term = 1;
+
+    for (let i = 1; i < 100; i++) {
+      term *= x / i;
+      sum += term;
+    }
+
+    return sum;
+  }
+
+  // Calculate the power using the formula base^exponent = e^(exponent * ln(base))
+  let power = exp(exponent * ln(base));
+  return power;
 }
+
 
 export function sinh(x){
     //set e^x
@@ -58,38 +88,6 @@ export function mad(numbers) {
 
   // Calculate and return the mean of the absolute deviations
   return mean(absoluteDeviations);
-}
-
-export function log(base, x) {
-    if (x < 0 || base <= 0) {
-       return NaN;
-    }
-    if (x === 0) {
-       return -Infinity;
-    }
-    if (x === 1) {
-       return 0;
-    }
-    var result = 0;
-    while (x >= base) {
-       result++;
-       x /= base;
-    }
- 
-    var decimalString = "0.";
-    for (let index = 0; index < 9; index++) {
-       var fraction = 0;
-       x = power(x, 10);
- 
-       while (x >= base) {
-          fraction++;
-          x /= base;
-       }
-       decimalString += fraction;
-    }
- 
-    let fractionDouble = parseFloat(decimalString);
-    return result + fractionDouble;
 }
 
 export function sqrt(x) {
@@ -167,22 +165,34 @@ function calculatePI(iterations=1000000) {
 }
 
 
+export function log(base, number, precision = 1e-10) {
+  if (number <= 0 || base <= 0 || base === 1) {
+    throw new Error('Invalid input: number and base must be positive and base cannot be 1');
+  }
+
+  let lowerBound = 0;
+  let upperBound = number;
+  let logValue = (lowerBound + upperBound) / 2;
+  let currentValue;
+
+  while (upperBound - lowerBound > precision) {
+    currentValue = power(base, logValue);
+
+    if (currentValue === number) {
+      break;
+    } else if (currentValue > number) {
+      upperBound = logValue;
+    } else {
+      lowerBound = logValue;
+    }
+
+    logValue = (lowerBound + upperBound) / 2;
+  }
+
+  return logValue;
+}
+
 
 export function abx(a, b, x){
-  var result = 1;
-
-  if(x == 0){
-      result = 1;
-  }
-  else if(x < 0){
-      for (let i = 0; i > x; i--) {
-          result /= b;
-        }
-  }
-  else{
-      for (let i = 0; i < x; i++) {
-          result *= b;
-        }
-  }
-  return result * a
+  return a * power(b,x)
 }

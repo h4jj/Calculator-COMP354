@@ -91,6 +91,7 @@ const InputButton = ({
         let baseOne = document.getElementById('pwr-large-one').innerText
         let baseTwo = document.getElementById('pwr-large-two').innerText
         let exponentOne = document.getElementById('pwr-small').innerText
+
         let resultAbx = ""
 
         if((Number(baseOne) || baseOne === '0') && (Number(baseTwo) || baseTwo === '0') && (Number(exponentOne) || exponentOne === '0')) {
@@ -516,7 +517,6 @@ const InputButton = ({
           }
         }
         catch(e) {
-          console.log(typeof evaluationString)
           toast("Issue occured, press CLR")
         }
       }
